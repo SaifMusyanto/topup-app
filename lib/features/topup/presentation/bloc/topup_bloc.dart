@@ -12,15 +12,16 @@ class TopupBloc extends Bloc<TopupEvent, TopupState> {
       emit(TopupLoading());
 
       try {
-        final url = await createTopup.execute(
-          TopupRequest(
-            amount: event.amount,
-            currency: event.currency,
-            cardDetails: event.cardDetails,
-          ),
-        );
+        // final url = await createTopup.execute(
+        //   TopupRequest(
+        //     amount: event.amount,
+        //     currency: event.currency,
+        //     cardDetails: event.cardDetails,
+        //   ),
+        // );
+        final url = "https://example.com/invoice/12345"; // Mock URL
 
-        emit(TopupSuccess(url));
+        emit(TopupSuccess(url, event.amount));
       } catch (e) {
         emit(TopupError('Topup failed: ${e.toString()}'));
       }

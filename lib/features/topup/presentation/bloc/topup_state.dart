@@ -6,7 +6,8 @@ class TopupLoading extends TopupState {}
 
 class TopupSuccess extends TopupState {
   final String invoiceUrl;
-  TopupSuccess(this.invoiceUrl);
+  final int amount;
+  TopupSuccess(this.invoiceUrl, this.amount);
 }
 
 class TopupError extends TopupState {
