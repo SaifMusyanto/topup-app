@@ -1,0 +1,25 @@
+name: topup_workspace
+
+packages:
+  - packages/**
+
+command:
+  bootstrap:
+    enforceLockfile: true
+
+    # Hooks: Menjalankan perintah otomatis setelah bootstrap
+    hooks:
+      post: dart run build_runner build --delete-conflicting-outputs
+
+scripts:
+  analyze:
+    run: melos exec -- "flutter analyze ."
+    description: Run analysis in all packages.
+
+  test:
+    run: melos exec --dir-exists="test" -- "flutter test"
+    description: Run tests only in packages that have a 'test' directory.
+
+  clean:
+    run: melos exec -- "flutter clean"
+    description: Clean build artifacts in all packages.

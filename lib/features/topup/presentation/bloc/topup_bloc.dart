@@ -1,5 +1,5 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:topup_app/features/topup/domain/entities/topup_request.dart';
 import 'package:topup_app/features/topup/domain/usecases/create_topup.dart';
 import 'package:topup_app/features/topup/presentation/bloc/topup_event.dart';
 import 'package:topup_app/features/topup/presentation/bloc/topup_state.dart';
@@ -26,5 +26,23 @@ class TopupBloc extends Bloc<TopupEvent, TopupState> {
         emit(TopupError('Topup failed: ${e.toString()}'));
       }
     });
+  }
+
+  @override
+  void onEvent(TopupEvent event) {
+    debugPrint('TopupBloc event: $event');
+    super.onEvent(event);
+  }
+
+  @override
+  void onTransition(Transition<TopupEvent, TopupState> transition) {
+    debugPrint('TopupBloc transition: $transition');
+    super.onTransition(transition);
+  }
+
+  @override
+  void onChange(Change<TopupState> change) {
+    debugPrint('TopupBloc state changed: $change');
+    super.onChange(change);
   }
 }
