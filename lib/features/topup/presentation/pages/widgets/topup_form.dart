@@ -1,36 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topup_app/features/topup/domain/entities/card_details.dart';
+import 'package:topup_app/features/topup/presentation/bloc/topup_bloc/topup_form_bloc.dart';
+import 'package:topup_app/features/topup/presentation/bloc/topup_bloc/topup_form_event.dart';
+import 'package:topup_app/features/topup/presentation/bloc/topup_bloc/topup_form_state.dart';
 import 'package:topup_app/features/topup/presentation/pages/widgets/textfield_global.dart';
 
-class TopupForm extends StatefulWidget {
-  const TopupForm({super.key});
-
-  @override
-  State<TopupForm> createState() => TopupFormState();
-}
-
-class TopupFormState extends State<TopupForm> {
-  final amountController = TextEditingController();
-  final cardNumberController = TextEditingController();
-  final cvvController = TextEditingController();
-  final expiryMonthController = TextEditingController();
-  final expiryYearController = TextEditingController();
-
+class TopupForm extends StatelessWidget {
   List<String> currency = ['USD', 'IDR'];
-  String? selectedCurrency;
-
-  CardDetails buildCardDetails() {
-    return CardDetails(
-      cardNumber: cardNumberController.text,
-      cvv: cvvController.text,
-      expiryMonth: expiryMonthController.text,
-      expiryYear: expiryYearController.text,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BlocBuilder<TopupFormBloc, TopupFormState>(
+      builder: (context, state) => Container(
+    child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
@@ -38,7 +21,9 @@ class TopupFormState extends State<TopupForm> {
                   title: 'Amount to Top-up', 
                   inputType: TextInputType.number, 
                   placeholder: 'Input amount',
-                  controller: amountController,
+                  onChanged: (amount) {
+                    context.read<TopupFormBloc>().add(AmountChanged(amount));
+                  },
                 ),
                 const SizedBox(height: 16.0),
                 Container(
@@ -51,14 +36,15 @@ class TopupFormState extends State<TopupForm> {
                   child: DropdownButton<String>(
                     borderRadius: BorderRadius.circular(4.0),
                     hint: const Text('Select Currency'),
-                    value: selectedCurrency,
+                    value: state.selectedCurrency,
                     isExpanded: true,
                     items: List.from(currency.map((c) => DropdownMenuItem(value: c, child: Text(c)))), 
-                    onChanged: (String? value) { 
-                      setState(() {
-                        selectedCurrency = value;
-                      });
-                    },),
+                    onChanged: (value) => {
+                    context.read<TopupFormBloc>().add(
+                      SelectedCurrencyChanged(value!),
+                    ),
+                },
+                    ),
                 ),
                 const SizedBox(height: 16.0),
                 Row(
@@ -69,7 +55,10 @@ class TopupFormState extends State<TopupForm> {
                         title: 'Card number',
                         inputType: TextInputType.text,
                         placeholder: 'input card number',
-                        controller: cardNumberController,
+                        onChanged: (cardNumber) => {
+                          context.read<TopupFormBloc>().add(
+                            CardNumberChanged(cardNumber))
+                        },
                       ),
                     ),
                     Expanded(
@@ -80,7 +69,11 @@ class TopupFormState extends State<TopupForm> {
                           title: 'CVV',
                           inputType: TextInputType.text,
                           placeholder: 'CVV',
-                          controller: cvvController,
+                          onChanged: (cvv) => {
+                          context.read<TopupFormBloc>().add(
+                            CvvChanged(cvv),
+                          ),
+                        },
                         ),
                       ),
                     ),
@@ -93,7 +86,11 @@ class TopupFormState extends State<TopupForm> {
                         title: 'Expiry Month',
                         inputType: TextInputType.text,
                         placeholder: 'Input expiry month',
-                        controller: expiryMonthController,
+                        onChanged: (expiryMonth) => {
+                        context.read<TopupFormBloc>().add(
+                          ExpiryMonthChanged(expiryMonth),
+                        ),
+                      },
                       ),
                     ),
                     Expanded(
@@ -103,7 +100,11 @@ class TopupFormState extends State<TopupForm> {
                           title: 'Expiry Year',
                           inputType: TextInputType.text,
                           placeholder: 'Input expiry year',
-                          controller: expiryYearController,
+                          onChanged: (expiryYear) => {
+                          context.read<TopupFormBloc>().add(
+                            ExpiryYearChanged(expiryYear),
+                          ),
+                        },
                         ),
                       ),
                     ),
@@ -111,6 +112,7 @@ class TopupFormState extends State<TopupForm> {
                 ),
               ],
             ),
-          );
+          )
+        ));
   }
 }

@@ -9,6 +9,7 @@ class TopupBloc extends Bloc<TopupEvent, TopupState> {
 
   TopupBloc(this.createTopup) : super(TopupInitial()) {
     on<SubmitTopup>((event, emit) async {
+      print('Processing SubmitTopup event');
       emit(TopupLoading());
 
       try {
@@ -20,10 +21,30 @@ class TopupBloc extends Bloc<TopupEvent, TopupState> {
           ),
         );
 
+        print('Topup successful, URL: $url');
         emit(TopupSuccess(url));
       } catch (e) {
+        print('Topup failed with error: $e');
         emit(TopupError('Topup failed: ${e.toString()}'));
       }
     });
+  }
+
+  @override
+  void onTransition(Transition<TopupEvent, TopupState> transition) {
+    super.onTransition(transition);
+    print(transition);
+  }
+
+  @override
+  void onEvent(TopupEvent event) {
+    super.onEvent(event);
+    print('Event: $event');
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    print('Error: $error');
   }
 }

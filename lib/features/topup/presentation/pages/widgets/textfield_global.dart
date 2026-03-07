@@ -5,14 +5,15 @@ class TextfieldGlobal extends StatelessWidget {
   final TextInputType? inputType;
   final String? placeholder;
   final TextEditingController? controller;
+  final ValueChanged<String> onChanged;
 
   const TextfieldGlobal({
     super.key,
     this.title,
     this.inputType,
     this.placeholder,
-    this.controller,
-  });
+    this.controller, 
+    required this.onChanged,});
 
   @override
   Widget build(BuildContext context) {

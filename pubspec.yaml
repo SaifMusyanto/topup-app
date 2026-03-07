@@ -39,6 +39,7 @@ dependencies:
   equatable: ^2.0.8
   url_launcher: ^6.3.2
   http: ^1.2.0
+  get_it: ^9.2.0
 
 dev_dependencies:
   flutter_test:
